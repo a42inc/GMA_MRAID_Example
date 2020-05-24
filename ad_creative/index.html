@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <script src="mraid.js"></script>
+  <script src="//media.admob.com/api/v1/google_mobile_app_ads.js"></script>
+  <script>
+    admob.events.dispatchAppEvent("admob", "script loaded");
+  </script>
+  <style>
+    * {
+      padding: 0px;
+      margin: 0px;
+      border: none;
+    }
+
+  </style>
+</head>
+<body>
+  <a href="%%CLICK_URL_UNESC%%">TEST BANNER</a>
+  <script>
+    function mraidIsReady() {
+      admob.events.dispatchAppEvent("mraid", "ready");
+      
+      mraid.removeEventListener('ready', mraidIsReady);
+      
+      mraid.addEventListener('viewableChange', (isViewable) => {
+        admob.events.dispatchAppEvent("mraid", `viewableChange: ${isViewable}`);
+      });
+    	
+      mraid.addEventListener('audioVolumeChange', (volume) => {
+        admob.events.dispatchAppEvent("mraid", `audioVolumeChange: ${volume}`);
+      });
+      
+      mraid.addEventListener('exposureChange', (exposedPercentage, visibleRectangle, occlusionRectangles) => {
+        admob.events.dispatchAppEvent("mraid", `exposureChange: ${exposedPercentage}`);
+      });
+    }
+    
+    admob.events.dispatchAppEvent("mraid", `version: ${mraid.getVersion()}`);
+
+    if (mraid.getState() == 'loading') {
+      mraid.addEventListener('ready', mraidIsReady);
+    }
+  </script>
+</body>
+</html>
